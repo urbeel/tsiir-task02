@@ -1,0 +1,43 @@
+plugins {
+    id 'java'
+    id "org.sonarqube" version "3.5.0.2730"
+}
+
+group 'by.urbel'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+sonarqube {
+    properties {
+        property "sonar.projectKey", "urbeel_test"
+        property "sonar.organization", "urbeel"
+        property "sonar.host.url", "https://sonarcloud.io"
+    }
+}
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'by.urbel.Main',
+        )
+    }
+    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+}
+
+dependencies {
+    implementation 'org.postgresql:postgresql:42.6.0'
+    implementation 'org.apache.commons:commons-dbcp2:2.9.0'
+    implementation 'at.favre.lib:bcrypt:0.10.2'
+    implementation 'org.apache.logging.log4j:log4j-core:2.20.0'
+    compileOnly 'org.projectlombok:lombok:1.18.26'
+    annotationProcessor 'org.projectlombok:lombok:1.18.26'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+}
+
+test {
+    useJUnitPlatform()
+}
